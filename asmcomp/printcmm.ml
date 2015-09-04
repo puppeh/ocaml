@@ -192,7 +192,7 @@ let data_item ppf = function
   | Cdouble f -> fprintf ppf "double %F" f
   | Csymbol_address s -> fprintf ppf "addr \"%s\"" s
   | Clabel_address l -> fprintf ppf "addr L%i" l
-  | Cstring s -> fprintf ppf "string \"%s\"" s
+  | Cstring s -> fprintf ppf "string \"%s\"" (String.escaped s)
   | Cskip n -> fprintf ppf "skip %i" n
   | Calign n -> fprintf ppf "align %i" n
 
