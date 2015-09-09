@@ -393,6 +393,10 @@ let mk_use_prims f =
   "-use-prims", Arg.String f, "<file>  (undocumented)"
 ;;
 
+let mk_cmm_only f =
+  "-cmm", Arg.Unit f, " (undocumented)"
+;;
+
 let mk_dparsetree f =
   "-dparsetree", Arg.Unit f, " (undocumented)"
 ;;
@@ -601,6 +605,7 @@ end;;
 module type Optcommon_options = sig
   val _compact : unit -> unit
   val _inline : int -> unit
+  val _cmm_only : unit -> unit
 
   val _dclambda : unit -> unit
   val _dcmm : unit -> unit
@@ -853,6 +858,7 @@ struct
     mk_warn_help F._warn_help;
     mk_where F._where;
     mk__ F.anonymous;
+    mk_cmm_only F._cmm_only;
 
     mk_nopervasives F._nopervasives;
     mk_dsource F._dsource;
@@ -914,6 +920,7 @@ module Make_opttop_options (F : Opttop_options) = struct
     mk_warn_error F._warn_error;
     mk_warn_help F._warn_help;
     mk__ F.anonymous;
+    mk_cmm_only F._cmm_only;
 
     mk_dsource F._dsource;
     mk_dparsetree F._dparsetree;

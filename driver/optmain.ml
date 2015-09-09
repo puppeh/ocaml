@@ -21,8 +21,16 @@ let process_interface_file ppf name =
 
 let process_implementation_file ppf name =
   let opref = output_prefix name in
-  Optcompile.implementation ppf name opref;
-  objfiles := (opref ^ ".cmx") :: !objfiles
+  if !cmm_only then begin
+    let oc = open_out (opref ^ ".cmm") in
+    let cmmf = Format.formatter_of_out_channel oc in
+    Optcompile.implementation ppf ~cmmf name opref;
+    Format.fprintf cmmf "@?";
+    close_out oc
+  end else begin
+    Optcompile.implementation ppf name opref;
+    objfiles := (opref ^ ".cmx") :: !objfiles
+  end
 
 let cmxa_present = ref false;;
 
@@ -135,6 +143,7 @@ module Options = Main_args.Make_optcomp_options (struct
           | Some setting -> Clflags.color := setting
     end
   let _where () = print_standard_library ()
+  let _cmm_only = set cmm_only
 
   let _nopervasives = set nopervasives
   let _dsource = set dump_source

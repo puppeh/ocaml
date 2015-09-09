@@ -104,6 +104,7 @@ module Options = Main_args.Make_optcomp_options (struct
   let _where = option "-where"
 
   let _nopervasives = option "-nopervasives"
+  let _cmm_only = option "-cmm"
   let _dsource = option "-dsource"
   let _dparsetree = option "-dparsetree"
   let _dtypedtree = option "-dtypedtree"

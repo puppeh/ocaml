@@ -18,6 +18,10 @@ val compile_implementation :
 val compile_phrase :
     Format.formatter -> Cmm.phrase -> unit
 
+val compile_cmm :
+    ?toplevel:(string -> bool) -> Format.formatter -> Format.formatter ->
+    int * Lambda.lambda -> unit
+
 type error = Assembler_error of string
 exception Error of error
 val report_error: Format.formatter -> error -> unit

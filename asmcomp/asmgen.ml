@@ -149,6 +149,21 @@ let compile_implementation ?toplevel prefixname ppf (size, lam) =
   compile_unit asmfile !keep_asm_file (prefixname ^ ext_obj)
     (fun () -> gen_implementation ?toplevel ppf (size, lam))
 
+let compile_cmm ?toplevel ppf cmmf (size, lam) =
+  Closure.intro size lam
+  ++ clambda_dump_if ppf
+  ++ Cmmgen.compunit size
+  ++ List.iter (fun p -> fprintf cmmf "%a@." Printcmm.phrase p);
+  match toplevel with
+    None -> ()
+  | Some f ->
+      List.iter
+        (function
+	  | (Cfunction {fun_name = name}) as ph when f name ->
+              fprintf cmmf "%a@." Printcmm.phrase ph
+	  | _ -> ())
+	(Cmmgen.generic_functions true [Compilenv.current_unit_infos ()])
+
 (* Error report *)
 
 let report_error ppf = function

@@ -15,5 +15,5 @@
 open Format
 
 val interface: formatter -> string -> string -> unit
-val implementation: formatter -> string -> string -> unit
+val implementation: formatter -> ?cmmf:formatter -> string -> string -> unit
 val c_file: string -> unit

@@ -57,7 +57,7 @@ let print_if ppf flag printer arg =
 let (++) x f = f x
 let (+++) (x, y) f = (x, f y)
 
-let implementation ppf sourcefile outputprefix =
+let implementation ppf ?cmmf sourcefile outputprefix =
   Compmisc.init_path true;
   let modulename = module_of_filename ppf sourcefile outputprefix in
   Env.set_unit_name modulename;
@@ -80,7 +80,9 @@ let implementation ppf sourcefile outputprefix =
       +++ print_if ppf Clflags.dump_rawlambda Printlambda.lambda
       +++ Simplif.simplify_lambda
       +++ print_if ppf Clflags.dump_lambda Printlambda.lambda
-      ++ Asmgen.compile_implementation outputprefix ppf;
+      ++ (match cmmf with
+	   None -> Asmgen.compile_implementation outputprefix ppf
+	 | Some cmmf -> Asmgen.compile_cmm ppf cmmf);
       Compilenv.save_unit_info cmxfile;
     end;
     Warnings.check_fatal ();
